@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <title>{% block title_block %}
+        Blogs {% endblock %}</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'index' %}"> Home </a>
+      </li>
+
+         {% if user.is_authenticated and user.is_active %}
+     <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+
+            {% if user.is_staff %}
+            @{{user.username}}  Instructor &#128994;
+            {% else %}
+            @{{user.username}} Student &#128994;
+            {% endif %}
+        </a>
+        <div class="dropdown-menu">
+ {% if not user.is_staff  %}
+              <a style="color:green" class="dropdown-item" href="{% url 'login_app:teacher' %}">Want to be a Instructor !</a>
+{% endif %}
+<hr>
+
+          <a style="color:blue" class="dropdown-item" href="{% url 'blog_app:create_blog' %}">Write Blog</a>
+
+
+          <a style="color:blue"class="dropdown-item" href="{% url 'blog_app:my_blogs' %}">My Blogs</a>
+          <a style="color:blue"class="dropdown-item" href="{% url 'blog_app:my_shared_blogs' %}">My Shared Blogs</a>
+             <a style="color:blue" class="dropdown-item" href="{% url 'blog_app:filter'  %}">Blog Categories</a>
+           <hr>
+
+            <a class="dropdown-item" href="{% url 'login_app:profile' %}">My Profile</a>
+
+            {% if user.is_staff %}
+          <a class="dropdown-item" href="{% url 'login_app:teacher_profile' %}">My Teaching Profile</a>
+{% endif %}
+              <a style="color:green" class="dropdown-item" href="{% url 'login_app:chat_list'  %}"> Chat List</a>
+
+          <a style="color:red"class="dropdown-item" href="{% url 'login_app:delete_profile' %}">Delete Profile!</a>
+
+          <a style="color:red"class="dropdown-item" href="{% url 'login_app:logout' %}">Logout</a>
+
+
+            <hr>
+
+      <h5><a style="color:purple" class="dropdown-item" href="{% url 'login_app:answer'   %}">Question Feed </a>
+</h5>
+
+            {% if user.is_staff %}
+             <h5><a style="color:purple" class="dropdown-item" href="{% url 'login_app:answer'   %}">Ans A question </a>
+</h5>
+
+            {% else %}
+               <h5><a style="color:purple" class="dropdown-item" href="{% url 'login_app:question'  %}">Ask A question? </a></h5>
+
+            {% endif %}
+        </div>
+
+      </div>
+        {% if user.is_staff and user.is_superuser %}
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> Show Admin settings &#128994; </a>
+
+         <div class="dropdown-menu">
+
+
+<a style="color:red"class="dropdown-item" href="http://127.0.0.1:8000/admin/">Admin Panel</a>
+
+              <a style="color:red"class="dropdown-item" href="http://127.0.0.1:8000/admin/blog_app/reader/">Writer/Instructor requests!</a>
+
+              <a style="color:red"class="dropdown-item" href="http://127.0.0.1:8000/admin/blog_app/blog">Modify Blogs </a>
+
+
+          {% endif %}
+          </div>
+        </div>
+
+
+        {% else %}
+ <li class="nav-item ">
+        <a class="nav-link" href="{% url 'login_app:signup' %}"> Sign Up </a>
+      </li>
+        <li class="nav-item ">
+        <a class="nav-link" href="{% url 'login_app:login' %}"> Sign in </a>
+
+       {% endif %}
+
+    </ul>
+  </nav>
+  <div class="container" style="padding-top:20px">
+{% block body_block %}
+
+{% endblock %}
+    </div>
+</body>
+</html>

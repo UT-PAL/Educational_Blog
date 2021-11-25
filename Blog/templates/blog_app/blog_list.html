@@ -1,0 +1,111 @@
+  
+{% extends 'base.html' %}
+
+{% block title_block %} Home {% endblock %}
+{% block body_block %}
+
+
+<form method="POST" action="{% url 'blog_app:search'  %}">
+    <div class="container">
+        <input class="form-control" type="text" name="search" placeholder="Search here">
+        <br>
+  {% csrf_token %}
+  <h6><button type="submit" class="btn btn-success btn-sm">Search</button>
+    </h6>
+    </div>
+</form>
+
+
+
+{% for blog in blogs %}
+
+{% if blog.author.user_profile.profile_pic %}
+<h4>
+<img src='/media/{{blog.author.user_profile.profile_pic}}' class="rounded-circle" width="40px">
+ {% else %}
+    <img src="/media/profile_pics/p.png" width="40px" height="40px" class="rounded-circle">
+
+<br>
+
+
+{% endif %}
+    <a class="btn btn-secondary btn-sm " href="{% url 'login_app:other_user' username=blog.author %}"> @{{blog.author}}
+        {% if not blog.author.user_profile.is_online %} <b>&#128994;</b>
+        {% else %}
+        &#128994;
+        {% endif %}</a>
+
+</h4>
+
+
+
+<h3>{{blog.blog_title}}</h3>
+<h6><i>{{blog.publish_date}}</i></h6>
+
+<div class="row">
+  <div class="col-lg-6">
+    <img src="/media/{{blog.blog_image}}"  title="{{blog.blog_title}}" width="100%">
+
+  </div>
+
+  <div class="col-sm-4">
+
+{% if not blog.liked_blog.count and not blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <h6 style="color:red">{{blog.liked_blog.count}} Likes |{{ blog.disliked_blog.count}} Dislikes </a> | {{blog.blog_comment.count}} Comments</h6>
+{%  endif %}
+
+{% if  blog.liked_blog.count and not blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <b><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+    <b style="color:red">{{ blog.disliked_blog.count}} Dislikes </b>
+      |<b style="color:red">{{blog.blog_comment.count}} Comments</b>
+{% endif %}
+
+
+{% if  blog.liked_blog.count and blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <a href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a> </h6>
+      <b style="color:red">{{blog.blog_comment.count}} Comments</b>
+{% endif %}
+
+
+{% if  blog.liked_blog.count and blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <a href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a> |
+      <b style="color:blue"> {{blog.blog_comment.count}} Comments</b> </h6>
+{% endif %}
+
+    {% if  blog.liked_blog.count and not blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <b style="color:red" >{{ blog.disliked_blog.count}} Dislikes </b>|
+     <b style="color:blue"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+
+     {% if not blog.liked_blog.count and  blog.disliked_blog.count and  not blog.blog_comment.count %}
+
+    <h6><b style="color:red">{{blog.liked_blog.count}} Likes </b>|
+      <a  href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a>|
+     <b style="color:red"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+ {% if not blog.liked_blog.count and not blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><b style="color:red">{{blog.liked_blog.count}} Likes </b>|
+      <b style="color:red">{{ blog.disliked_blog.count}} Dislikes </b>|
+     <b style="color:blue"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+
+  </div>
+    <h5><a class="btn btn-primary btn-sm "href="{% url 'blog_app:blog_details' slug=blog.slug %}">Read More</a>
+ <a class="btn btn-success btn-sm " href="{% url 'blog_app:review_detail' blog.slug%}">Want to review</a></h5>
+
+</div>
+<hr>
+{% endfor %}
+{% endblock %}

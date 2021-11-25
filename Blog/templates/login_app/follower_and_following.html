@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title_block %} Following and Followers {% endblock %}
+{% block body_block %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Followers </h2>
+{% if list %}
+{% for l in list %}
+
+<b>{{ l.follower }}</b>
+{% endfor %}
+{% else %}
+<h2>0</h2>
+{% endif %}
+
+<h2>Following </h2>
+{% if list1 %}
+ {% for l in list1 %}
+
+<b>{{ l.following }}</b>
+{% endfor %}
+
+{% else %}
+<h2>0</h2>
+
+
+{% endif %}
+</body>
+</html>
+
+{% endblock %}

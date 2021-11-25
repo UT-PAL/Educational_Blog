@@ -1,0 +1,93 @@
+{% extends 'base.html'%}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+ <style>
+    #leftbox {
+    float:left;
+    background:white;
+    width:50%;
+    align:left;
+    }
+     #rightbox {
+    float:right;
+    background:white;
+    width:50%;
+    align:right;
+
+    }
+
+</style>
+
+<div id="leftbox">
+
+<div id="msg">
+
+        {% for m in msg%}
+
+
+        {% if m.sender == request.user %}
+
+{% if m.sender.user_profile.profile_pic %}
+    <img src="/media/{{m.sender.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle">
+    {% else %}
+    <img src="/media/profile_pics/p.png" width="40px" height="40px" class="rounded-circle">
+    {% endif %}
+
+    <h5>Me: {{m.msg}}  </h5><p style="color:blue">sent</p>
+
+     {% if m.file %}
+    <img src="/media/{{m.file}}" width="50%">
+    {% endif %}
+        <b>{{ m.date }}</b><hr>
+
+
+        {% else %}
+
+
+   {% if m.sender.user_profile.profile_pic %}
+    <img src="/media/{{m.sender.user_profile.profile_pic}}" width="40px" height="40px" class="rounded-circle">
+    {% else %}
+    <img src="/media/profile_pics/p.png" width="40px" height="40px" class="rounded-circle">
+    {% endif %}
+
+    <h5> <b style="color:green">{{ m.sender}} :</b> {{m.msg}} </h5><p style="color:green">Received</p>
+
+
+    {% if m.file %}
+        <img src="/media/{{m.file}}" width="50%"><hr>
+    {% endif %}
+
+      <b>{{ m.date }}</b><hr>
+         {% endif %}
+
+        {% endfor %}
+    </div>
+
+<div class="container">
+            <form method="POST" id="msg_form" enctype="multipart/form-data">
+
+            {{ M_form|crispy}}
+            {% csrf_token %}
+
+                <button type="submit" class="btn btn-primary btn-sm">Send</button>
+
+                </form>
+    </div>
+        </div>
+
+
+
+
+
+
+
+<div is="rightbox">
+     {% for user in all_user %}
+
+    <a href="{% url 'login_app:chat' user  %}">{{ user }}</a><hr>
+
+    {% endfor %}
+</div>
+
+{% endblock %}

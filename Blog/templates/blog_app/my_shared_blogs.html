@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title_block %}My shared Blogs {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+
+  <div class="container">
+   {% if s %}
+<b>You have deleted the blog <b style="color:red">{{blog1}} </b><b style="color:blue">successfully </b></b>
+    <hr>
+{% else %}
+      {% if posts.count %}
+
+    {% for post in posts.all %}
+
+
+
+      <h2 class="btn btn-secondary btn-lg">  {{ request.user }}</h2>
+      <h5 style="color:green">  {{ post.whats_on_mind }}</h5>
+
+      <b> Shared at: {{ post.shared_date }} </b><hr>
+
+
+      <h4><img src="/media/{{post.blog.blog_image}}" width="50%"></h4>
+       <h2>{{post.blog.blog_title}}</h2>
+    <h4>Posted By: @{{post.blog.author}}</h4>
+
+       <i><h6>Published On: {{post.blog.publish_date}}</h6></i>
+    <i><h6>Updated On: {{post.blog.update_date}}</h6></i>
+
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:blog_details' slug=post.blog.slug %}">Read More</a>
+
+<a class="btn btn-danger btn-sm"  href="{% url 'blog_app:delete_shared_blogs' post.blog.slug %}">Delete</a><hr>
+         {% endfor %}
+
+    {% else %}
+    <h4><img src="/media/noblogs.gif" width="500px"></h4>
+{% endif %}
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title_block %} Question Feed {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+{% for q in all_ques %}
+<h2>{{ q.student }}</h2><hr>
+<b>Question : </b>
+{{ q.question|linebreaks }}<hr>
+{% if user.is_staff %}
+<h5><a class="btn btn-primary btn-md" href="{% url 'login_app:answer_question' pk=q.id %}">Ans This Question</a></h5>
+{% endif %}
+
+<h5><a class="btn btn-primary btn-md" href="{% url 'login_app:answer_details' pk=q.id %}">Show Answer</a><br></h5>
+
+
+{% endfor %}
+
+
+
+
+{% endblock %}

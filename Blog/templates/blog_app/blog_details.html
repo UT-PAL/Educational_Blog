@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+
+{% block title_block %} {{blog.blog_title}} {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+<div class="row">
+  <div class="col-sm-6">
+    <h2>{{blog.blog_title}}</h2>
+    <h4>Posted By: @{{blog.author}}</h4>
+
+      <h5><a class="btn btn-danger btn-lg " href="{% url 'blog_app:shared_blog' blog.slug%}">Share</a></h5>
+
+<h3>
+
+   {% if  review or comment_form  %}
+
+    {% if r.avg_review > 4.00 and r.avg_review <= 5.00 %}
+       <h2 style="font-size:40px"> {{r.avg_review}} <img src="/media/star.png" width="25px"> </h2>
+     <h5>
+
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}"> {{ review.count }} Reviews  </a>
+</h5>
+    {% endif %}
+
+      {% if r.avg_review > 3.00 and r.avg_review <= 4.00 %}
+       <h2 style="font-size:40px">{{r.avg_review}} <img src="/media/star.png" width="25px">
+    </h2>
+    <h5>
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}"> {{ review.count }} Reviews  </a>
+</h5>
+      {% endif %}
+
+{% if r.avg_review > 2.00 and r.avg_review <= 3.00 %}
+       <h2 style="font-size:40px"> {{r.avg_review}}<img src="/media/star.png" width="25px">
+
+    </h2>
+     <h5>
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}"> {{ review.count }} Reviews  </a>
+</h5>
+      {% endif %}
+
+
+    {% if r.avg_review > 1.00 and r.avg_review <= 2.00 %}
+       <h2 style="font-size:40px"> {{r.avg_review}}<img src="/media/star.png" width="20px">
+
+    </h2>
+     <h5>
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}"> {{ review.count }} Reviews  </a>
+</h5>
+      {% endif %}
+
+       {% if r.avg_review > 0.00 and r.avg_review <= 1.00 %}
+       <h2 style="font-size:40px">{{r.avg_review}} <img src="/media/star.png" width="20px">
+
+    </h2>
+     <h5>
+    <a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}"> {{ review.count }} Reviews  </a>
+</h5>
+      {% endif %}
+
+
+    {% else %}
+    <b>No reviews yet! </b>
+    {% endif %}
+
+<h6>
+
+<form method="POST">
+ {% if review_form and  not reviewed %}
+        {{ review_form|crispy }}
+
+        {% csrf_token %}<br>
+
+        <button type="submit" class="btn btn-primary btn-sm">Post</button>
+   {% endif %}
+
+      </form>
+
+  <br>
+  </h6>
+
+      <i><h6>Published On: {{blog.publish_date}}</h6></i>
+    <i><h6>Updated On: {{blog.update_date}}</h6></i>
+
+{% if not blog.liked_blog.count and not blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <h6 style="color:red">{{blog.liked_blog.count}} Likes |{{ blog.disliked_blog.count}} Dislikes </a> | {{blog.blog_comment.count}} Comments</h6>
+{%  endif %}
+
+{% if  blog.liked_blog.count and not blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <b><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+    <b style="color:red">{{ blog.disliked_blog.count}} Dislikes </b>
+      |<b style="color:red">{{blog.blog_comment.count}} Comments</b>
+{% endif %}
+
+
+{% if  blog.liked_blog.count and blog.disliked_blog.count and not blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <a href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a> </h6>
+      <b style="color:red">{{blog.blog_comment.count}} Comments</b>
+{% endif %}
+
+
+{% if  blog.liked_blog.count and blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <a href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a> |
+      <b style="color:blue"> {{blog.blog_comment.count}} Comments</b> </h6>
+{% endif %}
+
+    {% if  blog.liked_blog.count and not blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><a href="{% url 'blog_app:like_details' blog.slug %}">{{blog.liked_blog.count}} Likes </a>|
+      <b style="color:red" >{{ blog.disliked_blog.count}} Dislikes </b>|
+     <b style="color:blue"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+
+     {% if not blog.liked_blog.count and  blog.disliked_blog.count and  not blog.blog_comment.count %}
+
+    <h6><b style="color:red">{{blog.liked_blog.count}} Likes </b>|
+      <a  href="{% url 'blog_app:dislike_details' blog.slug %}">{{ blog.disliked_blog.count}} Dislikes </a>|
+     <b style="color:red"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+ {% if not blog.liked_blog.count and not blog.disliked_blog.count and  blog.blog_comment.count %}
+
+    <h6><b style="color:red">{{blog.liked_blog.count}} Likes </b>|
+      <b style="color:red">{{ blog.disliked_blog.count}} Dislikes </b>|
+     <b style="color:blue"> {{blog.blog_comment.count}} Comments </b></h6>
+{% endif %}
+
+
+
+
+  </div>
+  <div class="col-sm-6">
+    <img src="/media/{{blog.blog_image}}" width="100%">
+
+  </div>
+  <p>
+    {{blog.blog_content|linebreaks}}
+  </p>
+  <br>
+<br>
+    <br>
+
+  {% if  not liked and not disliked %}
+  <a href="{% url 'blog_app:liked_post' pk=blog.pk %}">
+     <i class="fa fa-thumbs-o-up fa-2x" aria-hidden="true"></i>
+    Like
+  </a>
+<h5></h5>
+<a href="{% url 'blog_app:dislike_post' pk=blog.pk %}">
+   <i class="fa fa-thumbs-o-down fa-2x" aria-hidden="true"></i>
+Dislike
+</a>
+ {% endif %}
+  {% if not liked and disliked %}
+<a href="{% url 'blog_app:disliked_post' pk=blog.pk %}">
+
+  <i class="fa fa-thumbs-o-down fa-3x" aria-hidden="true"></i>
+  <h5>Disliked</h5>
+
+  </a>
+  {% endif %}
+
+{% if  liked and not disliked %}
+  <a href="{% url 'blog_app:unliked_post' pk=blog.pk %}">
+   <h5> <img src="/media/like1.ico" width="50px"></h5>
+    <h5>Liked </h5>
+  </a>
+  {% endif %}
+
+</div>
+
+<style>
+    #leftbox {
+    float:left;
+    background:white;
+    width:50%;
+    align:left;
+    }
+     #rightbox {
+    float:right;
+    background:white;
+    width:50%;
+
+    }
+
+</style>
+
+
+
+
+
+
+
+
+    <div id="leftbox">
+
+<h2>Ratings </h2>
+<h5><a class="btn btn-primary btn-sm" href="{% url 'blog_app:review_detail' blog.slug %}">Show Ratings </a></h5>
+
+
+    {% for r in review.all %}
+
+{% if r.rating == 5%}
+
+    <p><h5><a href="{% url 'login_app:other_user' username=r.user %}">@{{r.user}}</a></h5>
+
+    <h2> <img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+<img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+    </h2>
+
+
+        {{r.review}}
+      <h6>{{r.review_date}}</h6></p>
+{% endif %}
+
+    {% if r.rating == 4%}
+    <p><h5><a href="{% url 'login_app:other_user' username=r.user %}">@{{r.user}}</a></h5>
+
+    <h2> <img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+<img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+
+    </h2>
+    <h6>{{r.review}}</h6>
+      <h6>{{r.review_date}}</h6></p>
+{% endif %}
+
+
+
+    {% if r.rating == 3%}
+    <p><h5><a href="{% url 'login_app:other_user' username=r.user %}">@{{r.user}}</a></h5>
+
+    <h2> <img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+<img src="/media/star.png" width="20px">
+    </h2>
+       <h6>{{r.review}}</h6>
+      <h6>{{r.review_date}}</h6></p>
+{% endif %}
+
+
+    {% if r.rating == 2%}
+    <p><h5><a href="{% url 'login_app:other_user' username=r.user %}">@{{r.user}}</a></h5>
+
+    <h2> <img src="/media/star.png" width="20px">
+        <img src="/media/star.png" width="20px">
+    </h2>
+
+
+       <h6>{{r.review}}</h6>
+      <h6>{{r.review_date}}</h6></p>
+{% endif %}
+
+
+    {% if r.rating == 1%}
+    <p><h5><a href="{% url 'login_app:other_user' username=r.user %}">@{{r.user}}</a></h5>
+
+    <h2> <img src="/media/star.png" width="20px">
+    </h2>
+    <h6>{{r.review}}</h6>
+      <h6>{{r.review_date}}</h6></p>
+{% endif %}
+
+
+    {% endfor %}
+
+    </div>
+
+
+
+
+    <div id="rightbox">
+        <h2>Comments</h2>
+        <h5><a class="btn btn-primary btn-sm "href="{% url 'blog_app:blog_details' slug=blog.slug %}">Comments</a></h5>
+      <hr>
+         {% if comment_form %}
+
+      {% for comment in blog.blog_comment.all %}
+      <p><a href="{% url 'login_app:other_user' username=comment.user %}">@{{comment.user}}</a>
+
+        {{comment.comment}}<br>
+      <h6>{{comment.comment_date}}</h6></p>
+      {% endfor %}
+
+      <form method="POST">
+        {{ comment_form|crispy }}
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-primary btn-sm" name="Comment">Comment</button>
+      {% endif %}
+      </form>
+
+
+  </div>
+
+
+
+  {% endblock %}

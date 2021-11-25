@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title_block %} Question Feed {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+
+{{ ques.question }}
+<form method="POST"enctype="multipart/form-data">
+ {{ form|crispy }}
+ {% csrf_token %}
+
+  <button type="submit" class="btn btn-warning btn-md">Ans</button>
+</form>
+
+
+
+
+
+
+{% endblock %}

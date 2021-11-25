@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title_block %} {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <h2>Categories :</h2><hr>
+    {% for b in blog %}
+
+    <h4><a href="{% url 'blog_app:filtered_blog' tag=b.tags %}">{{ b.slug}}</a></h4><hr>
+    <br>
+    {% endfor %}
+
+</head>
+
+<body>
+
+</body>
+</html>
+{% endblock %}

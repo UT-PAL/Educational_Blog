@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title_block %} Categories {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+
+</head>
+
+<body>
+<div class="container">
+
+    {% for b in f_blog %}
+
+    <p> <a class="btn btn-success btn-md " href="{% url 'blog_app:blog_details' b.slug %}">{{ b.slug }}</a></p><hr>
+
+
+    <img src="/media/{{b.blog_image}}" width="50%">
+
+
+  <p>
+    {{b.blog_content|linebreaks}}
+  </p>
+
+    <b>
+ Published By:
+   {{ b.author }}</b><hr>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title_block %} Answer Feed {% endblock %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+<h2>{{ question.question|linebreaks }}</h2><hr>
+{% if not ans %}
+<h2 style="color:red">No answer given yet!</h2><hr>
+{% endif %}
+
+{% for a in ans %}
+<h5 style="color:blue">{{ a.teacher.user }}</h5>
+<b>Answer : </b>
+<h6 style="color:green">{{a.answer|linebreaks }}</h6>
+{% if a.solution %}
+<h5> <img src="/media/{{ a.solution }}" width="400px"></h5>
+<hr>
+{% endif %}
+{% endfor %}
+
+<br>
+
+
+
+
+
+{% endblock %}

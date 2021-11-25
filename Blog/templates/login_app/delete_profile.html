@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Profile</title>
+</head>
+<body>
+<form method="POST">
+
+
+{{ form|crispy  }}
+{% csrf_token %}
+    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+</body>
+</html>
+{% endblock %}
